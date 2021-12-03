@@ -4,47 +4,54 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Integer> list = new ArrayList<Integer>();
+        ArrayList<String> list = new ArrayList<String>();
         File file = new File("input.txt");
         try(BufferedReader br = new BufferedReader(new FileReader(file))) {
             for(String line; (line = br.readLine()) != null; ) {
-                list.add(Integer.parseInt(line));
+                list.add(line);
             }
         }catch (Exception ignored){}
 
-        System.out.println(getMeasurement(list));
-        System.out.println(getTreeMeasurement(list));
-
-
+        System.out.println(getDepth(list));
+        System.out.println(getAim(list));
     }
-    static int getMeasurement(ArrayList<Integer> list){
-        int count = 0, prevNumber = list.get(0);
-        for (int i = 1 ; i < list.size(); i++){
-            if(prevNumber < list.get(i)){
-                count++;
+
+    static int getDepth(ArrayList<String> list){
+        int horizontal = 0, vertical = 0;
+        for (int i = 0; i < list.size(); i++) {
+            String[] str = list.get(i).split(" ");
+            switch (str[0]){
+                case "forward":
+                    horizontal += Integer.parseInt(str[1]);
+                    break;
+                case "up":
+                    vertical -= Integer.parseInt(str[1]);
+                    break;
+                case "down":
+                    vertical += Integer.parseInt(str[1]);
+                    break;
             }
-            prevNumber = list.get(i);
         }
-        return count;
+        return horizontal * vertical;
     }
-    static int getTreeMeasurement(ArrayList<Integer> list){
-        int count = 0, prevNumber = list.get(0) + list.get(1) + list.get(2), currNumber = 0;
-        Queue<Integer> queue = new LinkedList<Integer>();
-        queue.add(list.get(0));
-        queue.add(list.get(1));
-        queue.add(list.get(2));
-        for (int i = 3 ; i < list.size(); i++){
-            currNumber = 0;
-            queue.remove();
-            queue.add(list.get(i));
-            for (int num : queue){
-                currNumber += num;
+
+    static int getAim(ArrayList<String> list){
+        int horizontal = 0, vertical = 0, aim = 0;
+        for (int i = 0; i < list.size(); i++) {
+            String[] str = list.get(i).split(" ");
+            switch (str[0]){
+                case "forward":
+                    horizontal += Integer.parseInt(str[1]);
+                    vertical += aim * Integer.parseInt(str[1]);
+                    break;
+                case "up":
+                    aim -= Integer.parseInt(str[1]);
+                    break;
+                case "down":
+                    aim += Integer.parseInt(str[1]);
+                    break;
             }
-            if(currNumber > prevNumber){
-                count++;
-            }
-            prevNumber = currNumber;
         }
-        return count;
+        return horizontal * vertical;
     }
 }
