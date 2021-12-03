@@ -2,7 +2,7 @@
 Advent of Code 2021
 </h2>
 <h4 align="center">
-IntelliJ(JDK 11)
+IntelliJ (JDK 11)
 </h4>
 <p align="center">
   Day 0 => <a href="https://youtu.be/dQw4w9WgXcQ">Code</a><br/>
