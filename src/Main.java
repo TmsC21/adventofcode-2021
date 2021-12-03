@@ -4,92 +4,47 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<Integer> list = new ArrayList<Integer>();
         File file = new File("input.txt");
         try(BufferedReader br = new BufferedReader(new FileReader(file))) {
             for(String line; (line = br.readLine()) != null; ) {
-                list.add(line);
+                list.add(Integer.parseInt(line));
             }
         }catch (Exception ignored){}
-        System.out.println(getPwrConsum(list));
-        System.out.println(getRating(new ArrayList<String>(list),true)*getRating(new ArrayList<String>(list),false));
+
+        System.out.println(getMeasurement(list));
+        System.out.println(getTreeMeasurement(list));
+
+
     }
-    static int getRating(ArrayList<String> list, boolean isOxygen){
-        int one = 0, zero = 0, len = list.get(0).length();
-        String str = "";
-        for (int i = 0; i < len; i++) {
-            Iterator<String> iter = list.iterator();
-            for (int y = 0; y < list.size(); y++) {
-                if (list.get(y).charAt(i) == '1') {
-                    one++;
-                } else {
-                    zero++;
-                }
-                if (y == list.size() - 1) {
-                    if(isOxygen){
-                        if (one > zero) {
-                            str = str + "1";
-                        } else if (one == zero) {
-                            str = str + "1";
-                        } else {
-                            str = str + "0";
-                        }
-                    }else{
-                        if (one > zero) {
-                            str = str + "0";
-                        } else if (one == zero) {
-                            str = str + "0";
-                        } else {
-                            str = str + "1";
-                        }
-                    }
-                    one = 0;
-                    zero = 0;
-                }
+    static int getMeasurement(ArrayList<Integer> list){
+        int count = 0, prevNumber = list.get(0);
+        for (int i = 1 ; i < list.size(); i++){
+            if(prevNumber < list.get(i)){
+                count++;
             }
-            if (str.charAt(i) == '1') {
-                while (iter.hasNext()) {
-                    if (iter.next().charAt(i) != '1') {
-                        iter.remove();
-                    }
-                }
-            } else {
-                while (iter.hasNext()) {
-                    if (iter.next().charAt(i) != '0') {
-                        iter.remove();
-                    }
-                }
-            }
-            if(list.size() <= 1){
-                break;
-            }
+            prevNumber = list.get(i);
         }
-        return Integer.parseInt(list.get(0),2);
+        return count;
     }
-    static int getPwrConsum(ArrayList<String> list){
-        int one = 0, zero = 0, len = list.get(0).length();
-        String gamma  = "";
-        String epsilon = "";
-        for (int i = 0; i < len; i++) {
-            for (int y = 0; y < list.size(); y++) {
-                if (list.get(y).charAt(i) == '1') {
-                    one++;
-                } else {
-                    zero++;
-                }
-                if (y == list.size() - 1) {
-                    if (one > zero) {
-                        gamma  = gamma + "1";
-                        epsilon = epsilon + "0";
-                    } else {
-                        gamma  = gamma + "0";
-                        epsilon = epsilon + "1";
-                    }
-                    one = 0;
-                    zero = 0;
-                }
+    static int getTreeMeasurement(ArrayList<Integer> list){
+        int count = 0, prevNumber = list.get(0) + list.get(1) + list.get(2), currNumber = 0;
+        Queue<Integer> queue = new LinkedList<Integer>();
+        queue.add(list.get(0));
+        queue.add(list.get(1));
+        queue.add(list.get(2));
+        for (int i = 3 ; i < list.size(); i++){
+            currNumber = 0;
+            queue.remove();
+            queue.add(list.get(i));
+            for (int num : queue){
+                currNumber += num;
             }
+            if(currNumber > prevNumber){
+                count++;
+            }
+            prevNumber = currNumber;
         }
-        return Integer.parseInt(gamma,2) * Integer.parseInt(epsilon,2);
+        return count;
     }
 }
