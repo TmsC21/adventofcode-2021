@@ -11,29 +11,36 @@ public class Main {
                     list.add(line);
                 }
             }
-        } catch (Exception ignored) {
-        }
-        LinkedList<Integer> listOfFishes = getNumberOfFishs(list);
-        int rounds = 0, count = 0;
-        System.out.println(listOfFishes);
-        for (Integer number: listOfFishes){
-           count = calculate(rounds,count,number);
-        }
-        System.out.println("");
-        System.out.println(count);
+        } catch (Exception ignored) {}
 
-    }
-    static Integer calculate(int round, int count, Integer number){
-        while(round != 256){
+        LinkedList<Integer> listOfFishes = getNumberOfFishs(list);
+        Map<Integer,Long> myMap = getMap(listOfFishes);
+        int round = 0;
+        while(round < 256){
+            calculate(myMap);
             round++;
-            if(number == 0){
-                number = 7;
-                count = calculate(round,count,8);
-            }
-            number--;
         }
-        count++;
-        return count;
+        long count = myMap.values().stream().reduce((long)0,Long::sum);
+        System.out.println(count);
+    }
+    static void calculate(Map<Integer,Long> myMap){
+        long zeroIndex = myMap.get(0);
+        for (int i = 0; i < myMap.size()-1; i++){
+            myMap.put(i,myMap.get(i+1));
+        }
+        myMap.put(6,myMap.get(6)+zeroIndex);
+        myMap.put(8,zeroIndex);
+    }
+
+    static Map<Integer,Long> getMap(LinkedList<Integer> listOfFishes){
+        Map<Integer,Long> myMap = new HashMap<>();
+        for (int i = 0; i < 9; i++){
+            myMap.put(i,(long)0);
+        }
+        for (Integer num: listOfFishes){
+            myMap.put(num,myMap.get(num)+1);
+        }
+        return myMap;
     }
 
     static LinkedList<Integer> getNumberOfFishs(ArrayList<String> list){
