@@ -11,6 +11,7 @@ IntelliJ (JDK 11)
   Day 3 => <a href="https://github.com/TmsC21/adventofcode-2021/blob/day_3/src/Main.java">Code</a><br/>
   Day 4 => <a href="https://github.com/TmsC21/adventofcode-2021/blob/day_4/src/Main.java">Code</a><br/>
   Day 5 => <a href="https://github.com/TmsC21/adventofcode-2021/blob/day_5/src/Main.java">Code</a><br/>
+  Day 6 => <a href="https://github.com/TmsC21/adventofcode-2021/blob/day_6/src/Main.java">Code</a><br/>
 </p>
 
 
