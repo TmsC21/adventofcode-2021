@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+    public static int MAXPOSITION = 2000;
     public static void main(String[] args) {
         ArrayList<String> list = new ArrayList<String>();
         File file = new File("input.txt");
@@ -12,38 +13,26 @@ public class Main {
                 }
             }
         } catch (Exception ignored) {}
-
-        LinkedList<Integer> listOfFishes = getNumberOfFishs(list);
-        Map<Integer,Long> myMap = getMap(listOfFishes);
-        int round = 0;
-        while(round < 256){
-            calculate(myMap);
-            round++;
-        }
-        long count = myMap.values().stream().reduce((long)0,Long::sum);
-        System.out.println(count);
-    }
-    static void calculate(Map<Integer,Long> myMap){
-        long zeroIndex = myMap.get(0);
-        for (int i = 0; i < myMap.size()-1; i++){
-            myMap.put(i,myMap.get(i+1));
-        }
-        myMap.put(6,myMap.get(6)+zeroIndex);
-        myMap.put(8,zeroIndex);
+        LinkedList<Integer> horizontalPositionsList = getHorizPosit(list);
+        System.out.println("result: "+getResultsList(horizontalPositionsList));
     }
 
-    static Map<Integer,Long> getMap(LinkedList<Integer> listOfFishes){
-        Map<Integer,Long> myMap = new HashMap<>();
-        for (int i = 0; i < 9; i++){
-            myMap.put(i,(long)0);
+    static int getResultsList(LinkedList<Integer> horizontalPositionsList) {
+        int sum, result = MAXPOSITION;
+        for (int i = 1; i < MAXPOSITION; i++) {
+            sum = 0;
+            for(Integer number: horizontalPositionsList){
+                int num = Math.abs(number-i);
+                sum += (num+1) * num/2;
+            }
+            if(sum < result){
+                result = sum;
+            }
         }
-        for (Integer num: listOfFishes){
-            myMap.put(num,myMap.get(num)+1);
-        }
-        return myMap;
+       return result;
     }
 
-    static LinkedList<Integer> getNumberOfFishs(ArrayList<String> list){
+    static LinkedList<Integer> getHorizPosit(ArrayList<String> list){
         LinkedList<Integer> myList = new LinkedList<>();
         String[] strArr = list.get(0).split(",");
         for (String str: strArr){
